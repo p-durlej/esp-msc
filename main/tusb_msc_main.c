@@ -427,7 +427,7 @@ void app_main(void)
 #endif  // CONFIG_EXAMPLE_STORAGE_MEDIA_SPIFLASH
 
     //mounted in the app by default
-    _mount();
+    // _mount();
 
     ESP_LOGI(TAG, "USB MSC initialization");
     const tinyusb_config_t tusb_cfg = {
