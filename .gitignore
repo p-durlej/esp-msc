@@ -1,0 +1,5 @@
+sdkconfig.*
+sdkconfig
+!sdkconfig.example
+/build
+/managed_components
