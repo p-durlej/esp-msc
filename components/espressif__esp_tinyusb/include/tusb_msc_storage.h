@@ -18,6 +18,8 @@ extern "C" {
 #include "driver/sdmmc_host.h"
 #endif
 
+#define FILDES 1
+
 /**
  * @brief Data provided to the input of the `callback_mount_changed` and `callback_premount_changed` callback
  */
@@ -85,6 +87,10 @@ typedef struct {
  *       - ESP_ERR_NO_MEM, if there was no memory to allocate storage components;
  */
 esp_err_t tinyusb_msc_storage_init_spiflash(const tinyusb_msc_spiflash_config_t *config);
+
+#if FILDES
+esp_err_t tinyusb_msc_storage_init_fildes(int storage_fd);
+#endif
 
 #if SOC_SDMMC_HOST_SUPPORTED
 /**

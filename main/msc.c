@@ -235,7 +235,7 @@ clean:
 }
 #endif  // CONFIG_EXAMPLE_STORAGE_MEDIA_SPIFLASH
 
-void app_main(void)
+void msc_app_main(void)
 {
     ESP_LOGI(TAG, "Initializing storage...");
 
@@ -262,6 +262,40 @@ void app_main(void)
     ESP_ERROR_CHECK(tinyusb_msc_storage_init_sdmmc(&config_sdmmc));
     ESP_ERROR_CHECK(tinyusb_msc_register_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED, storage_mount_changed_cb)); /* Other way to register the callback i.e. registering using separate API. If the callback had been already registered, it will be overwritten. */
 #endif  // CONFIG_EXAMPLE_STORAGE_MEDIA_SPIFLASH
+
+    ESP_LOGI(TAG, "USB MSC initialization");
+    const tinyusb_config_t tusb_cfg = {
+        .device_descriptor = &descriptor_config,
+        .string_descriptor = string_desc_arr,
+        .string_descriptor_count = sizeof(string_desc_arr) / sizeof(string_desc_arr[0]),
+        .external_phy = false,
+#if (TUD_OPT_HIGH_SPEED)
+        .fs_configuration_descriptor = msc_fs_configuration_desc,
+        .hs_configuration_descriptor = msc_hs_configuration_desc,
+        .qualifier_descriptor = &device_qualifier,
+#else
+        .configuration_descriptor = msc_fs_configuration_desc,
+#endif // TUD_OPT_HIGH_SPEED
+    };
+    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+    ESP_LOGI(TAG, "USB MSC initialization DONE");
+}
+
+void msc_init(int storage_fd)
+{
+    ESP_LOGI(TAG, "Initializing storage...");
+
+    static sdmmc_card_t *card = NULL;
+    ESP_ERROR_CHECK(storage_init_sdmmc(&card));
+
+    const tinyusb_msc_sdmmc_config_t config_sdmmc = {
+        .card = card,
+        .callback_mount_changed = storage_mount_changed_cb,  /* First way to register the callback. This is while initializing the storage. */
+        .mount_config.max_files = 5,
+    };
+    // ESP_ERROR_CHECK(tinyusb_msc_storage_init_sdmmc(&config_sdmmc));
+    // ESP_ERROR_CHECK(tinyusb_msc_register_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED, storage_mount_changed_cb)); /* Other way to register the callback i.e. registering using separate API. If the callback had been already registered, it will be overwritten. */
+    ESP_ERROR_CHECK(tinyusb_msc_storage_init_fildes(storage_fd));
 
     ESP_LOGI(TAG, "USB MSC initialization");
     const tinyusb_config_t tusb_cfg = {

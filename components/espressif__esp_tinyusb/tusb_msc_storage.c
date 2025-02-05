@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <sys/stat.h>
+#include <unistd.h>
 #include <string.h>
 #include "esp_log.h"
 #include "esp_err.h"
@@ -31,6 +33,9 @@ typedef struct {
         wl_handle_t wl_handle;
 #if SOC_SDMMC_HOST_SUPPORTED
         sdmmc_card_t *card;
+#endif
+#if FILDES
+        int storage_fd;
 #endif
     };
     esp_err_t (*mount)(BYTE pdrv);
@@ -407,6 +412,119 @@ esp_err_t tinyusb_msc_storage_init_spiflash(const tinyusb_msc_spiflash_config_t 
 
     return ESP_OK;
 }
+
+#if FILDES
+static esp_err_t _mount_fildes(BYTE pdrv)
+{
+    // ff_diskio_register_sdmmc(pdrv, s_storage_handle->card);
+    // ff_sdmmc_set_disk_status_check(pdrv, false);
+    return ESP_OK;
+}
+
+static esp_err_t _unmount_fildes(void)
+{
+    // BYTE pdrv;
+    // pdrv = ff_diskio_get_pdrv_card(s_storage_handle->card);
+    // if (pdrv == 0xff) {
+    //     ESP_LOGE(TAG, "Invalid state");
+    //     return ESP_ERR_INVALID_STATE;
+    // }
+
+    // char drv[3] = {(char)('0' + pdrv), ':', 0};
+    // f_mount(0, drv, 0);
+    // ff_diskio_unregister(pdrv);
+
+    return ESP_OK;
+}
+
+static uint32_t _get_sector_count_fildes(void)
+{
+    struct stat st;
+
+    assert(s_storage_handle->storage_fd >= 0);
+    fstat(s_storage_handle->storage_fd, &st);
+    return (uint32_t)st.st_size / 512;
+}
+
+static uint32_t _get_sector_size_fildes(void)
+{
+    assert(s_storage_handle->storage_fd >= 0);
+    return (uint32_t)512;
+}
+
+static esp_err_t _read_sector_fildes(size_t sector_size,
+                                    uint32_t lba,
+                                    uint32_t offset,
+                                    size_t size,
+                                    void *dest)
+{
+    int fd = s_storage_handle->storage_fd;
+
+    assert(fd >= 0);
+    assert(offset == 0);
+
+    lseek(s_storage_handle->storage_fd, lba * 512, SEEK_SET);
+    if (read(fd, dest, size) != size)
+        return ESP_FAIL;
+    return ESP_OK;
+}
+
+static esp_err_t _write_sector_fildes(size_t sector_size,
+                                     size_t addr,
+                                     uint32_t lba,
+                                     uint32_t offset,
+                                     size_t size,
+                                     const void *src)
+{
+    int fd = s_storage_handle->storage_fd;
+
+    assert(fd >= 0);
+    assert(offset == 0);
+
+    lseek(s_storage_handle->storage_fd, lba * 512, SEEK_SET);
+    if (write(fd, src, size) != size)
+        return ESP_FAIL;
+    return ESP_OK;
+}
+
+esp_err_t tinyusb_msc_storage_init_fildes(int storage_fd)
+{
+    printf("tinyusb_msc_storage_init_fildes: storage_fd = %i\n", storage_fd);
+
+    assert(!s_storage_handle);
+    s_storage_handle = (tinyusb_msc_storage_handle_s *)malloc(sizeof(tinyusb_msc_storage_handle_s));
+    ESP_RETURN_ON_FALSE(s_storage_handle, ESP_ERR_NO_MEM, TAG, "could not allocate new handle for storage");
+    s_storage_handle->mount = &_mount_fildes;
+    s_storage_handle->unmount = &_unmount_fildes;
+    s_storage_handle->sector_count = &_get_sector_count_fildes;
+    s_storage_handle->sector_size = &_get_sector_size_fildes;
+    s_storage_handle->read = &_read_sector_fildes;
+    s_storage_handle->write = &_write_sector_fildes;
+    s_storage_handle->is_fat_mounted = false;
+    s_storage_handle->base_path = NULL;
+    s_storage_handle->storage_fd = storage_fd;
+    // In case the user does not set mount_config.max_files
+    // and for backward compatibility with versions <1.4.2
+    // max_files is set to 2
+    const int max_files = 10; // config->mount_config.max_files;
+    s_storage_handle->max_files = max_files > 0 ? max_files : 2;
+
+    // /* Callbacks setting up*/
+    // if (config->callback_mount_changed) {
+    //     tinyusb_msc_register_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED, config->callback_mount_changed);
+    // } else {
+    //     tinyusb_msc_unregister_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED);
+    // }
+    // if (config->callback_premount_changed) {
+    //     tinyusb_msc_register_callback(TINYUSB_MSC_EVENT_PREMOUNT_CHANGED, config->callback_premount_changed);
+    // } else {
+    //     tinyusb_msc_unregister_callback(TINYUSB_MSC_EVENT_PREMOUNT_CHANGED);
+    // }
+
+    printf("tinyusb_msc_storage_init_fildes: done\n");
+    return ESP_OK;
+}
+#endif
 
 #if SOC_SDMMC_HOST_SUPPORTED
 esp_err_t tinyusb_msc_storage_init_sdmmc(const tinyusb_msc_sdmmc_config_t *config)
