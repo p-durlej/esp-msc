@@ -18,5 +18,4 @@ void app_main(void)
     sdcard_init();
     open_storage();
     msc_init(storage_fd);
-    // msc_app_main();
 }

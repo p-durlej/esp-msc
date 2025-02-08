@@ -9,6 +9,6 @@ idf_component_register(
     SRCS "msc.c"
     SRCS "main.c"
     INCLUDE_DIRS .
-    REQUIRES fatfs sd_card
+    REQUIRES fatfs
     PRIV_REQUIRES "${priv_requires}"
 )
