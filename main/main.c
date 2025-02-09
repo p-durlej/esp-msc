@@ -91,7 +91,7 @@ const char **image_names(void)
             cnt++;
     rewinddir(dir);
 
-    char **names = calloc(cnt, sizeof *names);
+    char **names = calloc(cnt + 1, sizeof *names);
     int i = 0;
     while (de = readdir(dir), de != NULL)
         if (is_image_name(de->d_name))
