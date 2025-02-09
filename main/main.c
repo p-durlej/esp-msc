@@ -136,6 +136,12 @@ void remove_image(const char *name)
     unlink(pathname);
 }
 
+void close_image(void)
+{
+    close_storage();
+    reinit();
+}
+
 void reinit(void)
 {
     msc_shutdown();

@@ -80,8 +80,6 @@ void sdcard_init(void)
         .max_files = 5,
         .allocation_unit_size = 16 * 1024
     };
-    sdmmc_card_t *card;
-    const char mount_point[] = MOUNT_POINT;
     ESP_LOGI(TAG, "Initializing SD card");
 
     // Use settings defined above to initialize SD card and mount FAT filesystem.
@@ -191,4 +189,13 @@ void sdcard_shutdown(void)
         return;
     }
 #endif
+}
+
+void sdcard_format(void)
+{
+    esp_err_t ret = esp_vfs_fat_sdcard_format(mount_point, card);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to format FATFS (%s)", esp_err_to_name(ret));
+        return;
+    }
 }

@@ -1,6 +1,7 @@
 #include <esp_console.h>
 
 #include "main.h"
+#include "sdcard.h"
 
 static esp_console_repl_t *repl;
 
@@ -62,6 +63,14 @@ static int cmd_remove(int argc, char **argv)
     return 0;
 }
 
+static int cmd_format(int argc, char **argv)
+{
+    close_image();
+    sdcard_format();
+    reinit();
+    return 0;
+}
+
 static int cmd_list(int argc, char **argv)
 {
     const char **images;
@@ -116,6 +125,12 @@ static const esp_console_cmd_t cmds[] =
         .help = "remove an image file",
         .hint = NULL,
         .func = &cmd_remove,
+    },
+    {
+        .command = "format",
+        .help = "format the microsd card",
+        .hint = NULL,
+        .func = &cmd_format,
     },
     {
         .command = "list",
