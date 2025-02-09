@@ -5,7 +5,11 @@ if(CONFIG_EXAMPLE_STORAGE_MEDIA_SPIFLASH)
 endif()
 
 idf_component_register(
-    SRCS "tusb_msc_main.c"
+    SRCS "shell.c"
+    SRCS "sdcard.c"
+    SRCS "msc.c"
+    SRCS "main.c"
     INCLUDE_DIRS .
+    REQUIRES fatfs
     PRIV_REQUIRES "${priv_requires}"
 )
