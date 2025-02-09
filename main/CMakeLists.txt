@@ -5,6 +5,7 @@ if(CONFIG_EXAMPLE_STORAGE_MEDIA_SPIFLASH)
 endif()
 
 idf_component_register(
+    SRCS "shell.c"
     SRCS "sdcard.c"
     SRCS "msc.c"
     SRCS "main.c"

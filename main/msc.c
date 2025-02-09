@@ -115,8 +115,16 @@ static char const *string_desc_arr[] = {
 };
 /*********************************************************************** TinyUSB descriptors*/
 
+static int msc_running;
+
 void msc_init(int storage_fd)
 {
+    if (msc_running)
+    {
+        ESP_LOGE(TAG, "USB MSC already running");
+        return;
+    }
+
     ESP_LOGI(TAG, "Initializing storage...");
     ESP_ERROR_CHECK(tinyusb_msc_storage_init_fildes(storage_fd));
 
@@ -136,4 +144,16 @@ void msc_init(int storage_fd)
     };
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
     ESP_LOGI(TAG, "USB MSC initialization DONE");
+
+    msc_running = 1;
+}
+
+void msc_shutdown(void)
+{
+    ESP_LOGI(TAG, "Shutting down USB MSC\n");
+    tinyusb_msc_unregister_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED);
+    tinyusb_msc_storage_deinit();
+    tinyusb_driver_uninstall();
+
+    msc_running = 0;
 }
