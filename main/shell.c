@@ -51,6 +51,17 @@ static int cmd_create(int argc, char **argv)
     return 0;
 }
 
+static int cmd_remove(int argc, char **argv)
+{
+    if (argc != 2)
+    {
+        printf("arg count\n");
+        return 1;
+    }
+    remove_image(argv[1]);
+    return 0;
+}
+
 static int cmd_list(int argc, char **argv)
 {
     const char **images;
@@ -99,6 +110,12 @@ static const esp_console_cmd_t cmds[] =
         .help = "change the current image",
         .hint = NULL,
         .func = &cmd_create,
+    },
+    {
+        .command = "remove",
+        .help = "remove an image file",
+        .hint = NULL,
+        .func = &cmd_remove,
     },
     {
         .command = "list",

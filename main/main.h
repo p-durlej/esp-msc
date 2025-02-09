@@ -8,6 +8,7 @@ void save_config(void);
 
 void create_image(const char *name, long block_count);
 void change_image(const char *name);
+void remove_image(const char *name);
 
 const char **image_names(void);
 

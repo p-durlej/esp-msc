@@ -127,6 +127,15 @@ void change_image(const char *name)
     reinit();
 }
 
+void remove_image(const char *name)
+{
+    static char pathname[512];
+
+    strcpy(pathname, SDROOT "/");
+    strcat(pathname, name);
+    unlink(pathname);
+}
+
 void reinit(void)
 {
     msc_shutdown();
