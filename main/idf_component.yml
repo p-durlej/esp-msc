@@ -1,4 +1,7 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  espressif/esp_tinyusb: "^1.4.2"
+  espressif/esp_tinyusb:
+    git: "https://github.com/p-durlej/esp-usb-experimental.git"
+    path: "device/esp_tinyusb"
+    version: dev-fildes
   idf: "^5.0"
