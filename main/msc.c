@@ -125,6 +125,12 @@ void msc_init(int storage_fd)
         return;
     }
 
+    if (storage_fd < 0)
+    {
+        ESP_LOGE(TAG, "Invalid file descriptor");
+        return;
+    }
+
     ESP_LOGI(TAG, "Initializing storage...");
     ESP_ERROR_CHECK(tinyusb_msc_storage_init_fildes(storage_fd));
 
@@ -150,6 +156,12 @@ void msc_init(int storage_fd)
 
 void msc_shutdown(void)
 {
+    if (!msc_running)
+    {
+        ESP_LOGE(TAG, "USB MSC not currently running");
+        return;
+    }
+
     ESP_LOGI(TAG, "Shutting down USB MSC\n");
     tinyusb_msc_unregister_callback(TINYUSB_MSC_EVENT_MOUNT_CHANGED);
     tinyusb_msc_storage_deinit();
