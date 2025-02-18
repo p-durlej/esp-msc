@@ -3,3 +3,4 @@ sdkconfig
 !sdkconfig.example
 /build
 /managed_components
+/.vscode

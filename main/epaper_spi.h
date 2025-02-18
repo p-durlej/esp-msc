@@ -24,5 +24,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-void msc_init(int storage_fd);
-void msc_shutdown(void);
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+void epaper_send_request(const uint8_t *data, size_t len, bool is_command);
+void epaper_init_spi(void);
+void epaper_reset(void);
+
+void epaper_send_command(const uint8_t cmd);
+void epaper_send_data(const uint8_t *data, int len);
+void epaper_send_byte(uint8_t data);
+bool epaper_is_busy(void);

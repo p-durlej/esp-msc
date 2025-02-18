@@ -24,5 +24,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-void msc_init(int storage_fd);
-void msc_shutdown(void);
+#include <stdint.h>
+
+void epaper_init(void);
+void epaper_shutdown(void);
+void epaper_update(const uint8_t *bitmap);
