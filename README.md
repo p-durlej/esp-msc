@@ -2,4 +2,4 @@
 
 Experimental / proof of concept code. Contains known bugs.
 
-Production use will result in loss of data.
+Production use will likely result in loss of data.
