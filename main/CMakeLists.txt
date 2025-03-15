@@ -9,6 +9,9 @@ idf_component_register(
     SRCS "sdcard.c"
     SRCS "msc.c"
     SRCS "main.c"
+    SRCS "EPD_1in54_V2.c"
+    SRCS "epaper.c"
+    SRCS "epaper_spi.c"
     INCLUDE_DIRS .
     REQUIRES fatfs
     PRIV_REQUIRES "${priv_requires}"
