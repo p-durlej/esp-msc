@@ -56,9 +56,9 @@
 
 #include <stdio.h>
 
-#include "EPD_1in54_V2.h"
 #include "FreeRTOS.h"
 #include "epaper_spi.h"
+#include "epaper_ws.h"
 
 // XXX TODO: Clean up this shit...
 typedef uint8_t uint8_t;

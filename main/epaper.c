@@ -24,7 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "EPD_1in54_V2.h"
+#include "epaper_ws.h"
 
 #include "epaper.h"
 #include "epaper_spi.h"
