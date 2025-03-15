@@ -6,7 +6,7 @@
 *----------------
 * |	This version:   V1.0
 * | Date        :   2019-06-11
-* | Info        :   
+* | Info        :
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documnetation files (the "Software"), to deal
@@ -60,8 +60,8 @@
 #include <stdint.h>
 
 // Display resolution
-#define EPD_1IN54_V2_WIDTH       200
-#define EPD_1IN54_V2_HEIGHT      200
+#define EPD_1IN54_V2_WIDTH 200
+#define EPD_1IN54_V2_HEIGHT 200
 
 void EPD_1IN54_V2_Init(void);
 void EPD_1IN54_V2_Init_Partial(void);

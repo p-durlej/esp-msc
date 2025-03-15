@@ -26,25 +26,20 @@
 
 #include "EPD_1in54_V2.h"
 
-#include "epaper_spi.h"
 #include "epaper.h"
+#include "epaper_spi.h"
 
-void epaper_init(void)
-{
-    epaper_init_spi();
-    epaper_reset();
+void epaper_init(void) {
+	epaper_init_spi();
+	epaper_reset();
 }
 
-void epaper_shutdown(void)
-{
-    EPD_1IN54_V2_Sleep();
-}
+void epaper_shutdown(void) { EPD_1IN54_V2_Sleep(); }
 
-void epaper_update(const uint8_t *bitmap)
-{
-   	// EPD_1IN54_V2_DisplayPartBaseImage(bitmap);
-   	// EPD_1IN54_V2_DisplayPart(bitmap);
-    EPD_1IN54_V2_Init();
-    EPD_1IN54_V2_Display(bitmap);
-    EPD_1IN54_V2_Sleep();
+void epaper_update(const uint8_t *bitmap) {
+	// EPD_1IN54_V2_DisplayPartBaseImage(bitmap);
+	// EPD_1IN54_V2_DisplayPart(bitmap);
+	EPD_1IN54_V2_Init();
+	EPD_1IN54_V2_Display(bitmap);
+	EPD_1IN54_V2_Sleep();
 }

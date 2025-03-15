@@ -26,10 +26,9 @@
 
 #include <stdbool.h>
 
-extern struct config
-{
-    char image_name[256];
-    bool msc_disabled;
+extern struct config {
+	char image_name[256];
+	bool msc_disabled;
 } config;
 
 void load_config(void);
