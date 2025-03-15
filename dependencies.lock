@@ -8,7 +8,7 @@ dependencies:
       public: true
       version: '>=0.14.2'
     source:
-      git: https://github.com/p-durlej/esp-usb-experimental.git
+      git: hydra.int.durlej.net:/var/git/vreader/esp-usb-experimental
       path: device/esp_tinyusb
       type: git
     version: 621b7137a7c08908b4b08ff43713032a8eed57a0
@@ -29,10 +29,10 @@ dependencies:
   idf:
     source:
       type: idf
-    version: 5.4.0
+    version: 5.2.5
 direct_dependencies:
 - espressif/esp_tinyusb
 - idf
-manifest_hash: 888d90d370b94eff67659536ead4b0a388c6ac9012895abad689a20463781833
+manifest_hash: 1ca6e99c446599de88b3857d917165f802b30f6b21eabde0d236edef3329e699
 target: esp32s3
 version: 2.0.0
