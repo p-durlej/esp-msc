@@ -191,7 +191,7 @@ static const esp_console_cmd_t cmds[] = {
     },
     {
 	.command = "create",
-	.help = "change the current image",
+	.help = "create a new image file",
 	.hint = NULL,
 	.func = &cmd_create,
     },
