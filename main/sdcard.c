@@ -11,6 +11,7 @@
 #include "driver/sdmmc_host.h"
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
+#include "sdcard.h"
 #include <fcntl.h>
 #include <string.h>
 #include <sys/stat.h>

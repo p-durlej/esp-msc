@@ -24,6 +24,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-void sdcard_init(void);
+#include "esp_err.h"
+
+esp_err_t sdcard_init(void);
 void sdcard_shutdown(void);
 void sdcard_format(void);
