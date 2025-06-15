@@ -35,6 +35,7 @@
 #include "msc.h"
 #include "sdcard.h"
 #include "shell.h"
+#include "error_image.h"
 
 #define DEFAULT_IMAGE "storage.img"
 #define SDROOT "/sdcard"
@@ -166,7 +167,12 @@ void reinit(void) {
 void app_main(void) {
 	epaper_init();
 	shell_init();
-	sdcard_init();
+
+	esp_err_t status = sdcard_init();
+	if (status != ESP_OK) {
+		epaper_update(error_image);
+	}
+
 	load_config();
 	open_storage();
 	if (!config.msc_disabled)
