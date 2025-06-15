@@ -68,7 +68,7 @@ pin_configuration_t config = {
 static const char mount_point[] = MOUNT_POINT;
 static sdmmc_card_t *card;
 
-void sdcard_init(void) {
+esp_err_t sdcard_init(void) {
 	esp_err_t ret;
 
 	// Options for mounting the filesystem.
@@ -123,7 +123,7 @@ void sdcard_init(void) {
 		ESP_LOGE(
 		    TAG,
 		    "Failed to create a new on-chip LDO power control driver");
-		return;
+		return ret;
 	}
 	host.pwr_ctrl_handle = pwr_ctrl_handle;
 #endif
@@ -183,12 +183,13 @@ void sdcard_init(void) {
 			check_sd_card_pins(&config, pin_count);
 #endif
 		}
-		return;
+		return ret;
 	}
 	ESP_LOGI(TAG, "Filesystem mounted");
 
 	// Card has been initialized, print its properties
 	sdmmc_card_print_info(stdout, card);
+	return ESP_OK;
 }
 
 void sdcard_shutdown(void) {
